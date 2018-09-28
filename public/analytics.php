@@ -6,6 +6,8 @@ use Phalcon\Loader;
 use Phalcon\Mvc\Micro;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Db\Adapter\Pdo\Mysql as Database;
+use Phalcon\Db\Adapter\MongoDB\Client;
+use Phalcon\Paginator\Pager;
 
 try {
 
@@ -13,6 +15,18 @@ try {
      * Read the configuration
      */
     $config = include __DIR__ . '/../config/config.php';
+
+    /**
+     * Registering an autoloader
+     */
+    $loader = new Loader();
+
+    $loader
+        ->registerDirs([$config->application->modelsDir])
+        ->registerNamespaces([
+            'Phalcon' => '../Library/Phalcon/'
+        ])
+        ->register();
 
     $di = new FactoryDefault();
 
@@ -26,9 +40,14 @@ try {
         return $url;
     });
 
+    $di->set('collectionManager', function () {
+        return new \Phalcon\Mvc\Collection\Manager();
+    }, true);
+
     /**
      * Database connection is created based in the parameters defined in the configuration file
      */
+    /*
     $di->set('db', function () use ($config) {
         return new Database(
             [
@@ -39,15 +58,16 @@ try {
             ]
         );
     });
+    */
+    $di->set(
+        'mongo',
+        function () {
+            $mongo = new Client();
 
-    /**
-     * Registering an autoloader
-     */
-    $loader = new Loader();
-
-    $loader
-        ->registerDirs([$config->application->modelsDir])
-        ->register();
+            return $mongo->selectDatabase('test');
+        },
+        true
+    );
 
     /**
      * Starting the application
@@ -58,15 +78,28 @@ try {
      * Add your routes here
      */
     $app->get('/', function () {
-        $pare = $_GET;
-        $user_id = $_GET['uid'];
+        //$pare = $_GET;
+        //$user_id = $_GET['uid'];
+        $test = Conversation::find();
+        //echo 'There are ', count($test), "\n";
+        $paginator = new Pager(
+            [
+                "data"  => $test,
+                "limit" => 25,
+                "page"  => 1,
+            ]
+        );
 
+        $paginate = $paginator->getPaginate();
+        var_dump($paginate);
+        /*
         echo json_encode(
             [
                 'code' => 200,
                 'name' => 'test',
             ]
         );
+        */
     });
 
     /**
