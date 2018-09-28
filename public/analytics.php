@@ -80,18 +80,15 @@ try {
     $app->get('/', function () {
         //$pare = $_GET;
         //$user_id = $_GET['uid'];
-        $test = Conversation::find();
-        //echo 'There are ', count($test), "\n";
-        $paginator = new Pager(
+        $test = Conversation::find(
             [
-                "data"  => $test,
-                "limit" => 25,
-                "page"  => 1,
+                'conditions' => [
+                    'size.h' => 28
+                ]
             ]
         );
-
-        $paginate = $paginator->getPaginate();
-        var_dump($paginate);
+        //echo 'There are ', count($test), "\n";
+        var_dump($test);
         /*
         echo json_encode(
             [

@@ -6,6 +6,6 @@ class ProductsController extends Controller
 {
     public function indexAction()
     {
-        $this->view->product = Products::findFirst();
+        //$this->view->product = Products::findFirst();
     }
 }

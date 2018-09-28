@@ -11,6 +11,8 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Db\Adapter\Pdo\Mysql as Database;
 use Phalcon\Mvc\Model\Manager as ModelManager;
 use Phalcon\Mvc\Model\Metadata\Memory as ModelMetadata;
+use Phalcon\Mvc\Url;
+use Phalcon\Session\Adapter\Files as Session;
 
 /**
  * Very simple MVC structure
@@ -29,6 +31,17 @@ $loader->register();
 
 $di = new Di();
 
+$di->set(
+    'session',
+    function(){
+        $session = new Session();
+
+        $session->start();
+
+        return $session;
+    }
+);
+
 // Registering a router
 $di->set("router", Router::class);
 
@@ -40,6 +53,8 @@ $di->set("response", Response::class);
 
 // Registering a Http\Request
 $di->set("request", Request::class);
+
+$di->set("url",Url::class);
 
 // Registering the view component
 $di->set(
