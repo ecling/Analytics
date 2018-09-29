@@ -12,6 +12,8 @@ class Conversation extends MongoCollection
 {
     public function initialize()
     {
+
+        //var_dump($this->getConnection()->selectCollection('Conversation')->insertMany());
         $this->setSource('inventory');
     }
 }
