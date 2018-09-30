@@ -2,18 +2,22 @@
 
 use Phalcon\Mvc\Controller;
 
-class ProductsController extends Controller
+class AdvertisingController extends Controller
 {
     public function indexAction()
     {
         $this->view->product = Products::findFirst();
     }
 
-    public function addAction(){
+    public function editAction(){
+
+    }
+
+    public function saveAction(){
 
     }
 
     public  function listAction(){
-        $this->view->Adlist = Advertising::find();
+        
     }
 }
