@@ -92,7 +92,7 @@ try {
             ]
         ];
         //echo json_encode($array);
-        var_dump($test[0]);
+        var_dump((string)$test[0]->getId());
         exit();
         //验证站点和域名
         $website_id = $_GET['website_id'];
