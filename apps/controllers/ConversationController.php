@@ -8,7 +8,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class ConversationController extends Controller
+class ConversationController extends ControllerBase
 {
     public function adAction(){
 

@@ -8,7 +8,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class WebsiteController extends Controller
+class WebsiteController extends ControllerBase
 {
     public function indexAction(){
         $this->view->website = Website::find();
@@ -31,7 +31,7 @@ class WebsiteController extends Controller
             if($website){
                 $this->response->redirect('website');
             }else{
-                $time = date('Y-md-d H:i:s',time());
+                $time = date('Y-m-d H:i:s',time());
                 $website = new Website();
                 $website->name = $postData['name'];
                 $website->domain = $postData['domain'];

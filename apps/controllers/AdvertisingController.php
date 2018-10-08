@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class AdvertisingController extends Controller
+class AdvertisingController extends ControllerBase
 {
     public function indexAction()
     {
@@ -25,7 +25,7 @@ class AdvertisingController extends Controller
             if($ad){
                 $this->response->redirect('advertising/list');
             }else{
-                $time = date('Y-md-d H:i:s',time());
+                $time = date('Y-m-d H:i:s',time());
                 $ad = new Advertising();
                 $ad->name = $postData['name'];
                 $ad->image_url = $postData['image_url'];

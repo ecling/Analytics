@@ -8,7 +8,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class OrderController extends Controller
+class OrderController extends ControllerBase
 {
     public function adAction(){
         $this->view->items = array();
