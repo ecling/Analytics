@@ -7,6 +7,6 @@ class IndexController extends ControllerBase
 {
     public function indexAction()
     {
-        $test = new FormatDate();
+        //$test = new FormatDate();
     }
 }
