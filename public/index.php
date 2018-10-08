@@ -9,6 +9,7 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Db\Adapter\Pdo\Mysql as Database;
+use Phalcon\Db\Adapter\MongoDB\Client;
 use Phalcon\Mvc\Model\Manager as ModelManager;
 use Phalcon\Mvc\Model\Metadata\Memory as ModelMetadata;
 use Phalcon\Mvc\Url;
@@ -18,18 +19,28 @@ use Phalcon\Session\Adapter\Files as Session;
  * Very simple MVC structure
  */
 
+ini_set('date.timezone','UTC');
+
 $loader = new Loader();
 
 $loader->registerDirs(
-    [
-        "../apps/controllers/",
-        "../apps/models/",
-    ]
-);
+        [
+            "../apps/controllers/",
+            "../apps/models/",
+        ]
+    )
+    ->registerNamespaces([
+        'Phalcon' => '../Library/Phalcon/',
+        'Helper' => '../helper/'
+    ]);
 
 $loader->register();
 
 $di = new Di();
+
+$di->set('collectionManager', function () {
+    return new \Phalcon\Mvc\Collection\Manager();
+}, true);
 
 $di->set(
     'session',
@@ -68,6 +79,7 @@ $di->set(
     }
 );
 
+/*
 $di->set(
     "db",
     function () {
@@ -80,6 +92,17 @@ $di->set(
             ]
         );
     }
+);
+*/
+
+$di->set(
+    'mongo',
+    function () {
+        $mongo = new Client();
+
+        return $mongo->selectDatabase('test');
+    },
+    true
 );
 
 //Registering the Models-Metadata

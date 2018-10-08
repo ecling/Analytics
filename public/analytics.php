@@ -9,6 +9,8 @@ use Phalcon\Db\Adapter\Pdo\Mysql as Database;
 use Phalcon\Db\Adapter\MongoDB\Client;
 use Phalcon\Paginator\Pager;
 
+ini_set('date.timezone','UTC');
+
 try {
 
     /**

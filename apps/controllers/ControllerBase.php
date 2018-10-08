@@ -14,6 +14,5 @@ class ControllerBase extends Controller
             $this->response->redirect('login');
             return;
         }
-
     }
 }

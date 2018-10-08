@@ -11,7 +11,7 @@ use Phalcon\Mvc\Controller;
 class WebsiteController extends Controller
 {
     public function indexAction(){
-
+        $this->view->website = Website::find();
     }
 
     public function editAction()
@@ -21,6 +21,31 @@ class WebsiteController extends Controller
     }
 
     public function saveAction(){
-
+        $postData = $_POST;
+        if(isset($postData['name'])&&isset($postData['domain'])){
+            $website = Website::findFirst([
+                'conditions' => [
+                    'domain' => $postData['domain']
+                ]
+            ]);
+            if($website){
+                $this->response->redirect('website');
+            }else{
+                $time = date('Y-md-d H:i:s',time());
+                $website = new Website();
+                $website->name = $postData['name'];
+                $website->domain = $postData['domain'];
+                $website->created_at = $time;
+                $website->updated_at = $time;
+                if($website->save() === false){
+                    echo 'error';
+                    $this->response->redirect('website/edit');
+                }else{
+                    $this->response->redirect('website');
+                }
+            }
+        }else{
+            $this->response->redirect('website/edit');
+        }
     }
 }
