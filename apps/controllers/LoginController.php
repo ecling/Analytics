@@ -26,6 +26,8 @@ class LoginController extends Controller
             if($user){
                 if($user->password==md5($_POST['password'])){
                     $this->session->set('user',$user->getId());
+                }else{
+                    $this->response->redirect('login');
                 }
             }else{
                 $this->response->redirect('login');
@@ -34,6 +36,6 @@ class LoginController extends Controller
             $this->response->redirect('login');
         }
         //$this->session->set('user','test');
-        //$this->response->redirect('index');
+        $this->response->redirect('index');
     }
 }

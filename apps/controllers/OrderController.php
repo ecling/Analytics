@@ -11,10 +11,10 @@ use Phalcon\Mvc\Controller;
 class OrderController extends Controller
 {
     public function adAction(){
-
+        $this->view->items = array();
     }
 
     public function listAction(){
-
+        $this->view->orders = array();
     }
 }
