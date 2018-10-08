@@ -6,7 +6,7 @@ class AdvertisingController extends Controller
 {
     public function indexAction()
     {
-        $this->view->product = Products::findFirst();
+        $this->view->ad = Advertising::find();
     }
 
     public function editAction(){

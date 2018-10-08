@@ -21,6 +21,8 @@ use Phalcon\Session\Adapter\Files as Session;
 
 ini_set('date.timezone','UTC');
 
+error_reporting(E_ALL);
+
 $loader = new Loader();
 
 $loader->registerDirs(

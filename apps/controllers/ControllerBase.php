@@ -9,10 +9,10 @@ class ControllerBase extends Controller
     {
         //测试去除登录验证
         if($this->session->has('user')){
-
+			
         }else{
-            $this->response->redirect('login');
-            return;
+            $this->response->redirect('/login');
+			return;
         }
     }
 }
