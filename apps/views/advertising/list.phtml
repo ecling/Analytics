@@ -400,6 +400,9 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-1" style="float:right; margin-bottom:20px;"><a href="/advertising/edit" class="btn btn-block btn-primary">增加</a></div>
+                </div>
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
@@ -423,13 +426,15 @@
                                     <th>名称</th>
                                     <th>图片</th>
                                     <th>状态</th>
+                                    <th>操作</th>
                                 </tr>
                                 <?php foreach($ad as $_ad): ?>
                                 <tr>
-                                    <td><?php echo (string)$_ad->getId(); ?></td>
+                                    <td><?php echo (string)$_ad->ad_id; ?></td>
                                     <td><?php echo $_ad->name; ?></td>
                                     <td><?php echo $_ad->image_url; ?></td>
-                                    <td><span class="label label-success">Approved</span></td>
+                                    <td><span class="label <?php echo (isset($_ad->status)&&$_ad->status==2)?'label-danger':'label-success'; ?>"><?php echo (isset($_ad->status)&&$_ad->status==2)?'关闭':'有效'; ?></span></td>
+                                    <td><a href="/advertising/edit?id=<?php echo $_ad->ad_id; ?>" class=""><i class="fa fa-edit"></i></a></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </table>

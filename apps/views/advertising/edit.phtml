@@ -406,15 +406,22 @@
                     <div class="box box-primary">
 
                         <!-- form start -->
-                        <form role="form" method="post" action="/advertising/save">
+                        <form id="advertising-edit-form" role="form" method="post" action="/advertising/save">
                             <div class="box-body">
+                                <?php if(isset($ad)): ?>
+                                <input name="ad_id" type="hidden" value="<?php echo $ad->ad_id; ?>" >
+                                <?php endif; ?>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">广告名称</label>
-                                    <input type="name" name="name" class="form-control" id="exampleInputEmail1" placeholder="">
+                                    <input type="name" name="name" class="form-control" id="exampleInputEmail1" placeholder="" value="<?php echo (isset($ad))?$ad->name:''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">广告图片</label>
-                                    <input type="image_url" name="image_url" class="form-control" id="exampleInputPassword1" placeholder="">
+                                    <input type="image_url" name="image_url" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo (isset($ad))?$ad->image_url:''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <input name="status" type="checkbox" id="status" <?php echo (isset($ad->status)&&$ad->status==2)?'checked':''; ?>  />
+                                    <label for="status">关闭广告</label>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -645,6 +652,9 @@
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
 <script src="/bower_components/fastclick/lib/fastclick.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <!-- Sparkline -->
@@ -660,5 +670,38 @@
 <script src="/dist/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
+
+<script>
+    $(function () {
+        $("#advertising-edit-form").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 2
+                },
+                image_url: {
+                    required: true,
+                    minlength: 5
+                }
+            },
+            messages: {
+                name: {
+                    required: "必填项",
+                    minlength: "Your username must consist of at least 2 characters"
+                },
+                image_url: {
+                    required: "必填项",
+                    minlength: "Your password must be at least 5 characters long"
+                }
+            }
+        });
+    })
+</script>
+<style>
+    form.cmxform label.error, label.error{
+        color: red;
+        font-style: italic;
+    }
+</style>
 </body>
 </html>

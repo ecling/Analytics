@@ -22,6 +22,8 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -402,10 +404,30 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
+                <div class="col-md-3" style="float:right;">
+                    <!-- Date and time range -->
+                    <div class="form-group">
+                        <label>Date and time range:</label>
+
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="reservationtime">
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">广告订单监控</h3>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-1" style="float:right; margin-bottom:20px;"><a href="/advertising/edit" class="btn btn-block btn-primary">增加</a></div>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -414,6 +436,7 @@
                                 <tr>
                                     <th>广告ID</th>
                                     <th>广告名称</th>
+                                    <th>广告图片</th>
                                     <th>访客数</th>
                                     <th>销售额</th>
                                     <th>未付款金额</th>
@@ -424,6 +447,7 @@
                                 <tr>
                                     <td><?php echo $_item['ad_id']; ?></td>
                                     <td><?php echo $_item['ad_name']; ?></td>
+                                    <td><?php echo $_item['image_url']; ?></td>
                                     <td><?php echo $_item['views']; ?></td>
                                     <td><?php echo $_item['total']; ?></td>
                                     <td><?php echo $_item['unpaid_total']; ?></td>
@@ -434,6 +458,7 @@
                                 <tr>
                                     <th>广告ID</th>
                                     <th>广告名称</th>
+                                    <th>广告图片</th>
                                     <th>访客数</th>
                                     <th>销售额</th>
                                     <th>未付款金额</th>
@@ -665,6 +690,11 @@
 <script src="/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- FastClick -->
 <script src="/bower_components/fastclick/lib/fastclick.js"></script>
+
+<!-- daterangepicker -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <!-- Sparkline -->
@@ -682,15 +712,15 @@
 <script src="/dist/js/demo.js"></script>
 <script>
     $(function () {
-        $('#example1').DataTable()
-        $('#example2').DataTable({
-            'paging'      : true,
-            'lengthChange': false,
-            'searching'   : false,
-            'ordering'    : true,
-            'info'        : true,
-            'autoWidth'   : false
-        })
+        $('#example1').DataTable({
+            'pageLength': 50
+        });
+
+        $('#reservationtime').daterangepicker({
+            opens: 'left'
+        }, function(start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
     })
 </script>
 </body>
