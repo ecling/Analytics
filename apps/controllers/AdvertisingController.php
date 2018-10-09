@@ -45,6 +45,10 @@ class AdvertisingController extends ControllerBase
                 $ad = new Advertising();
                 $ids = new Ids();
                 $ad->ad_id = $ids->getAdId();
+
+                $website_id = $this->session->get('website');
+                $ad->website_id =$website_id;
+
                 $ad->created_at = $time;
             }
             if(isset($postData['status'])){
