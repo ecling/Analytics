@@ -68,6 +68,11 @@ class AdvertisingController extends ControllerBase
     }
 
     public  function listAction(){
-        $this->view->ad = Advertising::find();
+        $website_id = $this->session->get('website');
+        $this->view->ad = Advertising::find([
+            [
+                'website_id' => $website_id
+            ]
+        ]);
     }
 }

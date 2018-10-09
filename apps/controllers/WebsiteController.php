@@ -35,6 +35,7 @@ class WebsiteController extends ControllerBase
                 $website = new Website();
                 $website->name = $postData['name'];
                 $website->domain = $postData['domain'];
+                $website->default = 0;
                 $website->created_at = $time;
                 $website->updated_at = $time;
                 if($website->save() === false){
