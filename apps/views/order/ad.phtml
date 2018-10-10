@@ -447,7 +447,7 @@
                                 <tr>
                                     <td><?php echo $_item['ad_id']; ?></td>
                                     <td><?php echo $_item['ad_name']; ?></td>
-                                    <td><?php echo $_item['image_url']; ?></td>
+                                    <td><img width="50" height="50" src="<?php echo $_item['image_url']; ?>"></td>
                                     <td><?php echo $_item['views']; ?></td>
                                     <td><?php echo $_item['total']; ?></td>
                                     <td><?php echo $_item['unpaid_total']; ?></td>
@@ -713,7 +713,8 @@
 <script>
     $(function () {
         $('#example1').DataTable({
-            'pageLength': 50
+            'pageLength': 50,
+            "order": [[ 0, "desc" ]]
         });
 
         $('#reservationtime').daterangepicker({
