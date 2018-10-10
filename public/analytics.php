@@ -81,8 +81,9 @@ try {
      */
     $app->get('/', function () {
         //test
-        $test = Conversation::find();
+        //$test = Conversation::find();
         //$test->save('{ item: "canvas test", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" } }');
+        /*
         $array = [
             'item'=> 'canvas',
             'qty'=> 100,
@@ -93,23 +94,23 @@ try {
                 'uom'=>'cm'
             ]
         ];
+        */
         //echo json_encode($array);
-        var_dump((string)$test[0]->getId());
-        exit();
+        //var_dump((string)$test[0]->getId());
+        //exit();
         //验证站点和域名
+
+        $time = date('Y-m-d H:i:s',time());
+
         $website_id = $_GET['website_id'];
         $domain = $_GET['domain'];
-        $website = Website::findFirst([
-            'conditions' => [
-                'website_id' => $website_id
-            ]
-        ]);
+        $website = Website::findById($website_id);
         if(!$website){
-            echo 'error';
+            echo 'website does not exist';
             exit();
         }else{
             if($website->domain != $domain){
-                echo 'error';
+                echo 'Domain Mismatch';
                 exit();
             }
         }
@@ -124,6 +125,7 @@ try {
         if(!$visitor){
             $visitor = new Visitor();
             $visitor->user_id = $user_id;
+            $visitor->created_at = $time;
             if($visitor->save()==false){
                 echo "Umh, We can't store robots right now: \n";
 
@@ -143,40 +145,72 @@ try {
                     'sid' => $sid
                 ]
             ]);
+
+            //判断是否属于系统广告
+            $is_system_ad = 0;
+            if(isset($_GET['utm_content'])){
+                $ad = Advertising::findFirst([
+                    [
+                        'ad_id' => (float)$_GET['utm_content']
+                    ]
+                ]);
+                if($ad){
+                    $is_system_ad = 1;
+                }else{
+                    $is_system_ad = 0;
+                }
+            }
+
             if($conversation){
-                if(isset($_GET['order'])) {
-                    $products = array();
-                    $order = new Order();
-                    $order->order_id = '';
-                    $order->ad = '';
-                    $order->subtotal = '';
-                    foreach ($products as $id=>$_product) {
-                        $order->products[$id]->sku = '';
-                        $order->products[$id]->qty = '';
-                        $order->products[$id]->price = '';
+                if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+                    $order = Order::findFirst([
+                        [
+                            'order_id' => $_GET['order_id']
+                        ]
+                    ]);
+                    if(!$order) {
+                        $order = new Order();
+                        $order->order_id = $_GET['order_id'];
+                        $order->order_total = $_GET['order_total'];
+                        $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
+                        $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
+                        $order->is_system_ad = $is_system_ad;
+                        $order->created_at = $time;
+                        $order->status = 2;
+                        if ($order->save() == false) {
+                            echo 'order save fail';
+                        }
+                    }else{
+                        echo 'order already exists';
                     }
-                    if($order->save()==false){
-                        echo 'error';
-                    }
+                    var_dump($order);
+                    exit();
                 }else{
 
                 }
             }else{
                 $conversation = new Conversation();
-                $conversation->user_agent = '';
-                $conversation->browser_name = '';
-                $conversation->browser_version = '';
-                $conversation->browser_lang = '';
-                $conversation->browser_date = '';
-                $conversation->operate = '';
-                $conversation->operate_relase = '';
-                $conversation->device_pixel_ratio = '';
-                $conversation->resolution = '';
-                $conversation->utm_source = '';
-                $conversation->utm_medium = '';
-                $conversation->utm_campaign = '';
-                $conversation->utm_term = '';
-                $conversation->utm_content = '';
+                $conversation->sid = $sid;
+                $conversation->user_agent = (isset($_GET['user_agent']))?$_GET['user_agent']:'';
+                $conversation->browser_name = (isset($_GET['browser_name']))?$_GET['browser_name']:'';
+                $conversation->browser_version = (isset($_GET['browser_version']))?$_GET['browser_version']:'';
+                $conversation->browser_lang = (isset($_GET['browser_lang']))?$_GET['browser_lang']:'';
+                $conversation->browser_date = $time;
+                $conversation->operate = (isset($_GET['operate']))?$_GET['operate']:'';
+                $conversation->operate_relase = (isset($_GET['operate_relase']))?$_GET['operate_relase']:'';
+                $conversation->device_pixel_ratio = (isset($_GET['device_pixel_ratio']))?$_GET['device_pixel_ratio']:'';
+                $conversation->resolution = (isset($_GET['resolution']))?$_GET['resolution']:'';
+                $conversation->color_depth = (isset($_GET['color_depth']))?$_GET['color_depth']:'';
+                $conversation->utm_source = (isset($_GET['utm_source']))?$_GET['utm_source']:'';
+                $conversation->utm_medium = (isset($_GET['utm_medium']))?$_GET['utm_medium']:'';
+                $conversation->utm_campaign = (isset($_GET['utm_campaign']))?$_GET['utm_campaign']:'';
+                $conversation->utm_term = (isset($_GET['utm_term']))?$_GET['utm_term']:'';
+                $conversation->utm_content = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
+                $conversation->is_system_ad = $is_system_ad;
+                $conversation->created_at = $time;
+                if($conversation->save() === false){
+                    echo 'ad save fail';
+                }
             }
         }
 
