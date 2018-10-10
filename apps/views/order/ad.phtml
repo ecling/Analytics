@@ -440,6 +440,7 @@
                                     <th>访客数</th>
                                     <th>销售额</th>
                                     <th>未付款金额</th>
+                                    <td>操作</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -451,6 +452,7 @@
                                     <td><?php echo $_item['views']; ?></td>
                                     <td><?php echo $_item['total']; ?></td>
                                     <td><?php echo $_item['unpaid_total']; ?></td>
+                                    <td><a href="/advertising/edit?id=<?php echo $_item['ad_id']; ?>" class=""><i class="fa fa-edit"></i></a></td>
                                 </tr>
                                 <?php endforeach; ?>
                                 </tbody>
@@ -462,6 +464,7 @@
                                     <th>访客数</th>
                                     <th>销售额</th>
                                     <th>未付款金额</th>
+                                    <th>操作</th>
                                 </tr>
                                 </tfoot>
                             </table>

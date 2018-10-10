@@ -64,7 +64,7 @@ class AdvertisingController extends ControllerBase
                 echo 'error';
                 $this->response->redirect('advertising/edit');
             }else{
-                $this->response->redirect('order/list');
+                $this->response->redirect('order/ad');
             }
         }else{
             $this->response->redirect('advertising/edit');
