@@ -76,6 +76,9 @@ class AdvertisingController extends ControllerBase
         $this->view->ad = Advertising::find([
             [
                 'website_id' => $website_id
+            ],
+            'sort' => [
+                'ad_id' => -1
             ]
         ]);
     }
