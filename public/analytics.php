@@ -102,6 +102,15 @@ try {
 
         $time = date('Y-m-d H:i:s',time());
 
+        //get ip
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
         $website_id = $_GET['website_id'];
         $domain = $_GET['domain'];
         $website = Website::findById($website_id);
@@ -125,6 +134,7 @@ try {
         if(!$visitor){
             $visitor = new Visitor();
             $visitor->user_id = $user_id;
+            $visitor->website_id = $website_id;
             $visitor->created_at = $time;
             if($visitor->save()==false){
                 echo "Umh, We can't store robots right now: \n";
@@ -161,12 +171,12 @@ try {
                 }
             }
 
-            //增加会话
             if($conversation){
 
             }else{
                 $conversation = new Conversation();
                 $conversation->sid = $sid;
+                $conversation->website_id = $website_id;
                 $conversation->user_agent = (isset($_GET['user_agent']))?$_GET['user_agent']:'';
                 $conversation->browser_name = (isset($_GET['browser_name']))?$_GET['browser_name']:'';
                 $conversation->browser_version = (isset($_GET['browser_version']))?$_GET['browser_version']:'';
@@ -183,14 +193,14 @@ try {
                 $conversation->utm_term = (isset($_GET['utm_term']))?$_GET['utm_term']:'';
                 $conversation->utm_content = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
                 $conversation->is_system_ad = $is_system_ad;
+                $conversation->ip = $ip;
                 $conversation->created_at = $time;
                 if($conversation->save() === false){
                     echo 'ad save fail';
                 }
             }
 
-            //增加订单跟踪
-            if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+            if(isset($_GET['order_id'])&&isset($_GET['order_total'])&&$_GET['order_total']>0) {
                 $order = Order::findFirst([
                     [
                         'order_id' => $_GET['order_id']
@@ -201,8 +211,10 @@ try {
                     $order->order_id = $_GET['order_id'];
                     $order->order_total = $_GET['order_total'];
                     $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
+                    $order->website_id = $website_id;
                     $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
                     $order->is_system_ad = $is_system_ad;
+                    $order->ip  = $ip;
                     $order->created_at = $time;
                     $order->status = 2;
                     if ($order->save() == false) {
