@@ -1222,5 +1222,5 @@
 
     //通过Image对象请求后端脚本
     var img = new Image(1, 1);
-    img.src = '//test.analytics.com/analytics.php?' + args;
+    img.src = '//www.sznewcool.com/analytics.php?' + args;
 })();
