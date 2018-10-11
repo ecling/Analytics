@@ -200,7 +200,7 @@ try {
                 }
             }
 
-            if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+            if(isset($_GET['order_id'])&&isset($_GET['order_total'])&&$_GET['order_total']>0) {
                 $order = Order::findFirst([
                     [
                         'order_id' => $_GET['order_id']

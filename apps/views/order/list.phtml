@@ -421,10 +421,10 @@
                                 <tbody>
                                 <?php foreach($orders as $_order): ?>
                                 <tr>
-                                    <td><?php echo $_order->id; ?></td>
-                                    <td><?php echo $_order->total; ?></td>
+                                    <td><?php echo $_order->order_id; ?></td>
+                                    <td><?php echo $_order->order_total; ?></td>
                                     <td><?php echo $_order->ad_id; ?></td>
-                                    <td><?php echo $_order->ad_name; ?></td>
+                                    <td><?php //echo $_order->ad_name; ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                                 </tbody>

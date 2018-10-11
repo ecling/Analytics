@@ -33,6 +33,7 @@ class OrderController extends ControllerBase
     }
 
     public function listAction(){
-        $this->view->orders = array();
+        $orders = Order::find();
+        $this->view->orders = $orders;
     }
 }
