@@ -11,6 +11,28 @@ use Phalcon\Mvc\Controller;
 class OrderController extends ControllerBase
 {
     public function adAction(){
+        $views = Conversation::aggregate([
+            [
+                '$match' => [
+                    'is_system_ad' => 1,
+                ],
+            ],
+            [
+                '$group' => [
+                    '_id' => '$utm_content',
+                    'total'  => [
+                        '$sum' => 1,
+                    ],
+                ]
+            ]
+        ]);
+
+        $ad_view = array();
+        foreach ($views->toArray() as $item) {
+            $tem_item = new ArrayIterator($item);
+            $ad_view[$tem_item->_id] = $tem_item->total;
+        }
+
         $ad = Advertising::find([
             [
                 'status' => 1
@@ -24,7 +46,7 @@ class OrderController extends ControllerBase
             $items[$_ad->ad_id]['ad_id'] = $_ad->ad_id;
             $items[$_ad->ad_id]['ad_name'] = $_ad->name;
             $items[$_ad->ad_id]['image_url'] = $_ad->image_url;
-            $items[$_ad->ad_id]['views'] = 0;
+            $items[$_ad->ad_id]['views'] = (isset($ad_view[$_ad->ad_id]))?$ad_view[$_ad->ad_id]:'0';
             $items[$_ad->ad_id]['total'] = 0;
             $items[$_ad->ad_id]['unpaid_total'] = 0;
         }
