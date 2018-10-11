@@ -161,33 +161,9 @@ try {
                 }
             }
 
+            //增加会话
             if($conversation){
-                if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
-                    $order = Order::findFirst([
-                        [
-                            'order_id' => $_GET['order_id']
-                        ]
-                    ]);
-                    if(!$order) {
-                        $order = new Order();
-                        $order->order_id = $_GET['order_id'];
-                        $order->order_total = $_GET['order_total'];
-                        $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
-                        $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
-                        $order->is_system_ad = $is_system_ad;
-                        $order->created_at = $time;
-                        $order->status = 2;
-                        if ($order->save() == false) {
-                            echo 'order save fail';
-                        }
-                    }else{
-                        echo 'order already exists';
-                    }
-                    var_dump($order);
-                    exit();
-                }else{
 
-                }
             }else{
                 $conversation = new Conversation();
                 $conversation->sid = $sid;
@@ -211,6 +187,32 @@ try {
                 if($conversation->save() === false){
                     echo 'ad save fail';
                 }
+            }
+
+            //增加订单跟踪
+            if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+                $order = Order::findFirst([
+                    [
+                        'order_id' => $_GET['order_id']
+                    ]
+                ]);
+                if(!$order) {
+                    $order = new Order();
+                    $order->order_id = $_GET['order_id'];
+                    $order->order_total = $_GET['order_total'];
+                    $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
+                    $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
+                    $order->is_system_ad = $is_system_ad;
+                    $order->created_at = $time;
+                    $order->status = 2;
+                    if ($order->save() == false) {
+                        echo 'order save fail';
+                    }
+                }else{
+                    echo 'order already exists';
+                }
+            }else{
+
             }
         }
 
