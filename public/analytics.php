@@ -134,6 +134,7 @@ try {
         if(!$visitor){
             $visitor = new Visitor();
             $visitor->user_id = $user_id;
+            $visitor->website_id = $website_id;
             $visitor->created_at = $time;
             if($visitor->save()==false){
                 echo "Umh, We can't store robots right now: \n";
@@ -175,6 +176,7 @@ try {
             }else{
                 $conversation = new Conversation();
                 $conversation->sid = $sid;
+                $conversation->website_id = $website_id;
                 $conversation->user_agent = (isset($_GET['user_agent']))?$_GET['user_agent']:'';
                 $conversation->browser_name = (isset($_GET['browser_name']))?$_GET['browser_name']:'';
                 $conversation->browser_version = (isset($_GET['browser_version']))?$_GET['browser_version']:'';
@@ -209,6 +211,7 @@ try {
                     $order->order_id = $_GET['order_id'];
                     $order->order_total = $_GET['order_total'];
                     $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
+                    $order->website_id = $website_id;
                     $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
                     $order->is_system_ad = $is_system_ad;
                     $order->ip  = $ip;
