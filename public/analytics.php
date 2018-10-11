@@ -102,6 +102,15 @@ try {
 
         $time = date('Y-m-d H:i:s',time());
 
+        //get ip
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
         $website_id = $_GET['website_id'];
         $domain = $_GET['domain'];
         $website = Website::findById($website_id);
@@ -162,32 +171,7 @@ try {
             }
 
             if($conversation){
-                if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
-                    $order = Order::findFirst([
-                        [
-                            'order_id' => $_GET['order_id']
-                        ]
-                    ]);
-                    if(!$order) {
-                        $order = new Order();
-                        $order->order_id = $_GET['order_id'];
-                        $order->order_total = $_GET['order_total'];
-                        $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
-                        $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
-                        $order->is_system_ad = $is_system_ad;
-                        $order->created_at = $time;
-                        $order->status = 2;
-                        if ($order->save() == false) {
-                            echo 'order save fail';
-                        }
-                    }else{
-                        echo 'order already exists';
-                    }
-                    var_dump($order);
-                    exit();
-                }else{
 
-                }
             }else{
                 $conversation = new Conversation();
                 $conversation->sid = $sid;
@@ -207,10 +191,37 @@ try {
                 $conversation->utm_term = (isset($_GET['utm_term']))?$_GET['utm_term']:'';
                 $conversation->utm_content = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
                 $conversation->is_system_ad = $is_system_ad;
+                $conversation->ip = $ip;
                 $conversation->created_at = $time;
                 if($conversation->save() === false){
                     echo 'ad save fail';
                 }
+            }
+
+            if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+                $order = Order::findFirst([
+                    [
+                        'order_id' => $_GET['order_id']
+                    ]
+                ]);
+                if(!$order) {
+                    $order = new Order();
+                    $order->order_id = $_GET['order_id'];
+                    $order->order_total = $_GET['order_total'];
+                    $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
+                    $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
+                    $order->is_system_ad = $is_system_ad;
+                    $order->ip  = $ip;
+                    $order->created_at = $time;
+                    $order->status = 2;
+                    if ($order->save() == false) {
+                        echo 'order save fail';
+                    }
+                }else{
+                    echo 'order already exists';
+                }
+            }else{
+
             }
         }
 
