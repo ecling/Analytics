@@ -426,7 +426,7 @@
                                     <td><?php echo $_order->order_total; ?></td>
                                     <td><?php echo $_order->ad_id; ?></td>
                                     <td><?php //echo $_order->ad_name; ?></td>
-                                    <td><span class="label label-danger">待验证</span></td>
+                                    <td><span class="label <?php echo ($_order->status==1)?'label-success':'label-danger'?>"><?php echo ($_order->status==1)?'已验证':'待验证'?></span></td>
                                 </tr>
                                 <?php endforeach; ?>
                                 </tbody>

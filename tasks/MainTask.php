@@ -47,7 +47,7 @@ class MainTask extends Task
             $session = $client->login('analytics', 'ssI3wz%CZb5ZHfJ7kk*h3anp7Luu1UCz');
 
             $result = $client->call($session, 'sales_order.info', $order->order_id);
-            if(isset($result['state'])&&($result['state'] == 'processing')||$result['complete'] == 'complete'){
+            if(isset($result['state'])&&($result['state'] == 'processing')||$result['state'] == 'complete'){
                 $order->status = 1;
             }else{
                 $order->status = 3;
