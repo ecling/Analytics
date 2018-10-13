@@ -416,15 +416,17 @@
                                     <th>金额</th>
                                     <th>广告ID</th>
                                     <th>广告名称</th>
+                                    <th>状态</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php foreach($orders as $_order): ?>
                                 <tr>
-                                    <td><?php echo $_order->id; ?></td>
-                                    <td><?php echo $_order->total; ?></td>
+                                    <td><?php echo $_order->order_id; ?></td>
+                                    <td><?php echo $_order->order_total; ?></td>
                                     <td><?php echo $_order->ad_id; ?></td>
-                                    <td><?php echo $_order->ad_name; ?></td>
+                                    <td><?php //echo $_order->ad_name; ?></td>
+                                    <td><span class="label <?php echo ($_order->status==1)?'label-success':'label-danger'?>"><?php echo ($_order->status==1)?'已验证':'待验证'?></span></td>
                                 </tr>
                                 <?php endforeach; ?>
                                 </tbody>
@@ -434,6 +436,7 @@
                                     <th>金额</th>
                                     <th>广告ID</th>
                                     <th>广告名称</th>
+                                    <th>状态</th>
                                 </tr>
                                 </tfoot>
                             </table>

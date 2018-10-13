@@ -200,7 +200,7 @@ try {
                 }
             }
 
-            if(isset($_GET['order_id'])&&isset($_GET['order_total'])) {
+            if(isset($_GET['order_id'])&&isset($_GET['order_total'])&&$_GET['order_total']>0) {
                 $order = Order::findFirst([
                     [
                         'order_id' => $_GET['order_id']
@@ -209,7 +209,7 @@ try {
                 if(!$order) {
                     $order = new Order();
                     $order->order_id = $_GET['order_id'];
-                    $order->order_total = $_GET['order_total'];
+                    $order->order_total = (float)$_GET['order_total'];
                     $order->sid = (isset($_GET['sid']))?$_GET['sid']:'';
                     $order->website_id = $website_id;
                     $order->ad_id = (isset($_GET['utm_content']))?$_GET['utm_content']:'';
