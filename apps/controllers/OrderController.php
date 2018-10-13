@@ -7,15 +7,37 @@
  */
 
 use Phalcon\Mvc\Controller;
+use Helper\Date as FormatDate;
 
 class OrderController extends ControllerBase
 {
     public function adAction(){
+        $helper = new FormatDate();
+
+        //确认开始结束时间
+        if($this->session->has('start_time')){
+            $start_time = $this->session->get('start_time');
+        }else{
+            $start_time = new \DateTime('now');
+            $start_time->sub(new \DateInterval('P7D'));
+            $start_time = $start_time->format('Y-m-d H:i:s');
+        }
+
+        if($this->session->has('end_time')){
+            $end_time = $this->session->get('end_time');
+        }else{
+            $end_time = date('Y-m-d H:i:s',time());
+        }
+
         //浏览量聚合
         $views = Conversation::aggregate([
             [
                 '$match' => [
                     'is_system_ad' => 1,
+                    'created_at' => [
+                        '$gte' => $start_time,
+                        '$lte' => $end_time
+                    ]
                 ],
             ],
             [
@@ -39,7 +61,11 @@ class OrderController extends ControllerBase
             [
                 '$match' => [
                     'is_system_ad' => 1,
-                    'status' => 1
+                    'status' => 1,
+                    'created_at' => [
+                        '$gte' => $start_time,
+                        '$lte' => $end_time
+                    ]
                 ]
             ],
             [
@@ -69,6 +95,10 @@ class OrderController extends ControllerBase
                     'is_system_ad' => 1,
                     'status' => [
                         '$gte' => 2
+                    ],
+                    'created_at' => [
+                        '$gte' => $start_time,
+                        '$lte' => $end_time
                     ]
                 ]
             ],
@@ -112,6 +142,8 @@ class OrderController extends ControllerBase
             $items[$_ad->ad_id]['unpaid_total'] = (isset($ad_unpaid[$_ad->ad_id]['total']))?$ad_unpaid[$_ad->ad_id]['total']:'0';
         }
 
+        $this->view->start = $helper->getLocalDateTime($start_time,'m/d/Y');
+        $this->view->end = $helper->getLocalDateTime($end_time,'m/d/Y');
         $this->view->items = $items;
     }
 

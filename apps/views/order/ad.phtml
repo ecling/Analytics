@@ -413,7 +413,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-clock-o"></i>
                             </div>
-                            <input type="text" class="form-control pull-right" id="reservationtime">
+                            <input type="text" class="form-control pull-right" id="reservationtime" value="<?php echo $start.' - '.$end;?>">
                         </div>
                         <!-- /.input group -->
                     </div>
@@ -438,7 +438,9 @@
                                     <th>广告名称</th>
                                     <th>广告图片</th>
                                     <th>访客数</th>
+                                    <th> 订单数</th>
                                     <th>销售额</th>
+                                    <th></th>
                                     <th>未付款金额</th>
                                     <td>操作</td>
                                 </tr>
@@ -450,7 +452,9 @@
                                     <td><?php echo $_item['ad_name']; ?></td>
                                     <td><img width="50" height="50" src="<?php echo $_item['image_url']; ?>"></td>
                                     <td><?php echo $_item['views']; ?></td>
+                                    <td><?php echo $_item['paid_num']; ?></td>
                                     <td><?php echo $_item['total']; ?></td>
+                                    <td><?php echo $_item['unpaid_num']; ?></td>
                                     <td><?php echo $_item['unpaid_total']; ?></td>
                                     <td><a href="/advertising/edit?id=<?php echo $_item['ad_id']; ?>" class=""><i class="fa fa-edit"></i></a></td>
                                 </tr>
@@ -723,7 +727,16 @@
         $('#reservationtime').daterangepicker({
             opens: 'left'
         }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            $.ajax({
+                type: "POST",
+                url: "/time/ajax",
+                data: "start_time="+start.format('YYYY-MM-DD')+"&end_time="+end.format('YYYY-MM-DD'),
+                success: function(msg){
+                    //alert( "Data Saved: " + msg );
+                    location=location
+                }
+            });
         });
     })
 </script>
