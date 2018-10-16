@@ -170,7 +170,13 @@ class OrderController extends ControllerBase
     }
 
     public function listAction(){
-        $orders = Order::find();
+        $orders = Order::find([
+            [],
+            'sort' => [
+                'created_at' => -1
+            ],
+            'limit' => 100
+        ]);
         $this->view->orders = $orders;
     }
 }
