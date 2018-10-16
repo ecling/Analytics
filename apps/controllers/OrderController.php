@@ -131,6 +131,7 @@ class OrderController extends ControllerBase
             ]
         ]);
         $items = array();
+        $total = array('views'=>0,'paid_num'=>0,'total'=>0,'unpaid_num'=>0,'unpaid_total'=>0);
         foreach ($ad as $_ad) {
             $items[$_ad->ad_id]['ad_id'] = $_ad->ad_id;
             $items[$_ad->ad_id]['ad_name'] = $_ad->name;
@@ -140,10 +141,31 @@ class OrderController extends ControllerBase
             $items[$_ad->ad_id]['total'] = (isset($ad_paid[$_ad->ad_id]['total']))?$ad_paid[$_ad->ad_id]['total']:'0';
             $items[$_ad->ad_id]['unpaid_num'] = (isset($ad_unpaid[$_ad->ad_id]['num']))?$ad_unpaid[$_ad->ad_id]['num']:'0';
             $items[$_ad->ad_id]['unpaid_total'] = (isset($ad_unpaid[$_ad->ad_id]['total']))?$ad_unpaid[$_ad->ad_id]['total']:'0';
+
+            if(isset($ad_view[$_ad->ad_id])){
+                $total['views']  += $ad_view[$_ad->ad_id];
+            }
+
+            if(isset($ad_paid[$_ad->ad_id]['num'])){
+                $total['paid_num'] += $ad_paid[$_ad->ad_id]['num'];
+            }
+
+            if(isset($ad_paid[$_ad->ad_id]['total'])){
+                $total['total'] += $ad_paid[$_ad->ad_id]['total'];
+            }
+
+            if(isset($ad_unpaid[$_ad->ad_id]['num'])){
+                $total['unpaid_num'] += $ad_unpaid[$_ad->ad_id]['num'];
+            }
+
+            if(isset($ad_unpaid[$_ad->ad_id]['total'])){
+                $total['unpaid_total'] += $ad_unpaid[$_ad->ad_id]['total'];
+            }
         }
 
         $this->view->start = $helper->getLocalDateTime($start_time,'m/d/Y');
         $this->view->end = $helper->getLocalDateTime($end_time,'m/d/Y');
+        $this->view->total = $total;
         $this->view->items = $items;
     }
 

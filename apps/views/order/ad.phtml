@@ -462,6 +462,17 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
+                                    <th>总计</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th><?php echo $total['views']; ?></th>
+                                    <th><?php echo $total['paid_num']; ?></th>
+                                    <th><?php echo $total['total']; ?></th>
+                                    <th><?php echo $total['unpaid_num']; ?></th>
+                                    <th><?php echo $total['unpaid_total']; ?></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
                                     <th>广告ID</th>
                                     <th>广告名称</th>
                                     <th>广告图片</th>
@@ -722,7 +733,8 @@
 <script>
     $(function () {
         $('#example1').DataTable({
-            'pageLength': 50,
+            'pageLength': 500,
+            'lengthMenu': [50,100,500]
             "order": [[ 0, "desc" ]]
         });
 
