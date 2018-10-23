@@ -37,7 +37,7 @@ class MainTask extends Task
 
         // If somestuff requires API authentication,
         // then get a session token
-        $session = $client->login('analytics', 'ssI3wz%CZb5ZHfJ7kk*h3anp7Luu1UCz');
+        $session = $client->login($this->config->api->api_user, $this->config->api->api_key);
 
         foreach ($order as $_order) {
             $result = $client->call($session, 'sales_order.info', $_order->order_id);
