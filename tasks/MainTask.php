@@ -20,8 +20,8 @@ class MainTask extends Task
         echo PHP_EOL;
         */
         //查询两个小时之前的订单
-        $time = date('Y-m-d h:i:s',time()-7200);
-        $order = Order::findFirst([
+        $time = date('Y-m-d h:i:s',time()-2*3600);
+        $order = Order::find([
             'conditions' => [
                 'created_at' => [
                     '$lt' => $time
@@ -29,36 +29,31 @@ class MainTask extends Task
                 'status' => [
                     '$eq' => 2
                 ]
-            ]
+            ],
+            'limit' => 10
         ]);
 
-        if($order) {
-            $order = $order->toArray();
-        }
+        $client = new SoapClient('https://www.bellecat.com/api/soap/?wsdl');
 
-        if(isset($order['order_id'])) {
-            $order_id = (string)$order['_id'];
-            $order = Order::findById($order_id);
+        // If somestuff requires API authentication,
+        // then get a session token
+        $session = $client->login('analytics', 'ssI3wz%CZb5ZHfJ7kk*h3anp7Luu1UCz');
 
-            $client = new SoapClient('https://www.bellecat.com/api/soap/?wsdl');
+        foreach ($order as $_order) {
+            $result = $client->call($session, 'sales_order.info', $_order->order_id);
 
-            // If somestuff requires API authentication,
-            // then get a session token
-            $session = $client->login('analytics', 'ssI3wz%CZb5ZHfJ7kk*h3anp7Luu1UCz');
-
-            $result = $client->call($session, 'sales_order.info', $order->order_id);
             if(isset($result['state'])&&($result['state'] == 'processing')||$result['state'] == 'complete'){
-                $order->status = 1;
+                $_order->status = 1;
             }else{
-                $order->status = 3;
+                $_order->status = 3;
             }
 
-            if($order->save() === false){
+            if($_order->save() === false){
 
             }
-
-            // If you don't need the session anymore
-            $client->endSession($session);
         }
+
+        // If you don't need the session anymore
+        $client->endSession($session);
     }
 }
