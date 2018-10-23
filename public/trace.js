@@ -899,6 +899,13 @@
     utm_campaign    = params.utm_campaign ? params.utm_campaign : utm_campaign
     utm_content     = params.utm_content ? params.utm_content : utm_content
     utm_term        = params.utm_term ? params.utm_term : utm_term
+
+    //新广告访问生成新的session id
+    if(utm_content&&utm_content!=Get_Cookie('utm_content')){
+        params.sid = uuid;
+        Set_Cookie( 'sid', uuid, 30, '/', '', '' );
+    }
+
     if(fid || ((!cookie_fid) && (utm_source || utm_medium || utm_campaign || utm_content || utm_term))){ //存在 fid，不管 utm 的各个参数是否存在，强制覆盖cookie
         if(utm_source){
             //set fid cookie.
