@@ -7,8 +7,12 @@ use Phalcon\Db\Adapter\MongoDB\Client;
 
 ini_set('date.timezone','UTC');
 
+$config = include __DIR__ . '/../config/config.php';
+
 // Using the CLI factory default services container
 $di = new CliDI();
+
+$di->set('config',$config,true);
 
 $di->set('collectionManager', function () {
     return new \Phalcon\Mvc\Collection\Manager();

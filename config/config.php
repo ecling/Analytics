@@ -19,6 +19,10 @@ return new Config(
             'metadata' => [
                 'adapter' => 'Memory'
             ]
+        ],
+        'api' => [
+            'api_user' => 'analytics',
+            'api_key' => 'ssI3wz%CZb5ZHfJ7kk*h3anp7Luu1UCz'
         ]
     ]
 );
