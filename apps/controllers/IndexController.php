@@ -7,6 +7,15 @@ class IndexController extends ControllerBase
 {
     public function indexAction()
     {
-        //$test = new FormatDate();
+        $website_id = $this->session->get('website');
+        $websites = Website::find();
+        $this->view->websites = $websites;
+        foreach ($websites as $_website) {
+            $id = (string)$_website->getId();
+            if($website_id==$id){
+                $currentWebsite = $_website;
+            }
+        }
+        $this->view->currentWebsite = $currentWebsite;
     }
 }

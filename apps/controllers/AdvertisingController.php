@@ -10,6 +10,8 @@ class AdvertisingController extends ControllerBase
     }
 
     public function editAction(){
+        $website_id = $this->session->get('website');
+        $this->view->website = Website::findById($website_id);
         if(isset($_GET['id'])){
             $ad = Advertising::findFirst([
                 [

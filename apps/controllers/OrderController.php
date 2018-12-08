@@ -29,10 +29,13 @@ class OrderController extends ControllerBase
             $end_time = date('Y-m-d H:i:s',time());
         }
 
+        $website_id = $this->session->get('website');
+
         //浏览量聚合
         $views = Conversation::aggregate([
             [
                 '$match' => [
+                    'website_id' => $website_id,
                     'is_system_ad' => 1,
                     'created_at' => [
                         '$gte' => $start_time,
@@ -60,6 +63,7 @@ class OrderController extends ControllerBase
         $order_paid = Order::aggregate([
             [
                 '$match' => [
+                    'website_id' => $website_id,
                     'is_system_ad' => 1,
                     'status' => 1,
                     'created_at' => [
@@ -92,6 +96,7 @@ class OrderController extends ControllerBase
         $order_unpaid = Order::aggregate([
             [
                 '$match' => [
+                    'website_id' => $website_id,
                     'is_system_ad' => 1,
                     'status' => [
                         '$gte' => 2
@@ -124,7 +129,8 @@ class OrderController extends ControllerBase
 
         $ad = Advertising::find([
             [
-                'status' => 1
+                'status' => 1,
+                'website_id' => $website_id
             ],
             'sort' => [
                 'ad_id' => -1

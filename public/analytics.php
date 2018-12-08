@@ -161,7 +161,8 @@ try {
             if(isset($_GET['utm_content'])){
                 $ad = Advertising::findFirst([
                     [
-                        'ad_id' => (float)$_GET['utm_content']
+                        'ad_id' => (float)$_GET['utm_content'],
+                        'website_id' => $website_id
                     ]
                 ]);
                 if($ad){
