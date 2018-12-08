@@ -37,7 +37,14 @@ class MainTask extends Task
             'limit' => 10
         ]);
 
-        $client = new SoapClient('https://www.bellecat.com/api/soap/?wsdl');
+        if($order->website_id=='5bbad9219f8cf01e5a0bfd32'){
+            $api_url = 'https://www.bellecat.com/api/soap/?wsdl';
+        }
+        if($order->website_id=='5bf2754c9f8cf01c6639c866'){
+            $api_url = 'https://www.babears.com/api/soap/?wsdl';
+        }
+
+        $client = new SoapClient($api_url);
 
         // If somestuff requires API authentication,
         // then get a session token

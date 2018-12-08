@@ -64,6 +64,7 @@ class AdvertisingController extends ControllerBase
 
             if($ad->save() === false){
                 echo 'error';
+                exit();
                 $this->response->redirect('advertising/edit');
             }else{
                 $this->response->redirect('order/ad');

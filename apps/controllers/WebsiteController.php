@@ -49,4 +49,11 @@ class WebsiteController extends ControllerBase
             $this->response->redirect('website/edit');
         }
     }
+
+    public function changeAction(){
+        if(isset($_GET['id'])){
+            $this->session->set('website',(string)$_GET['id']);
+            $this->response->redirect($_SERVER['HTTP_REFERER']);
+        }
+    }
 }

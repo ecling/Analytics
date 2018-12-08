@@ -7,6 +7,7 @@ class IndexController extends ControllerBase
 {
     public function indexAction()
     {
+        /*
         $website_id = $this->session->get('website');
         $websites = Website::find();
         $this->view->websites = $websites;
@@ -17,5 +18,6 @@ class IndexController extends ControllerBase
             }
         }
         $this->view->currentWebsite = $currentWebsite;
+        */
     }
 }
